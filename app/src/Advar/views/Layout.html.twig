@@ -1,0 +1,31 @@
+{#
+    Layout.html.twig
+#}
+
+{# -- layout to test twig templates -- #}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}{% endblock %}
+        <title>{% block title%}{% endblock %}</title>
+    </head>
+    <body>
+        {% block body_layout %}
+            {% block header %} {% endblock %}
+            <div class="container">
+                {% block header_content %} {% endblock %}
+                
+                {% block content %} 
+                    {% if nemo_page is not empty %}
+                        {{ include ( nemo_page ~ ".html.twig") }}
+                    {% endif %}
+                {% endblock %}
+            </div>
+            
+            {% block footer %} {% endblock %}
+        {% endblock %}
+        
+        {% block scripts %} {% endblock %}
+    </body>
+</html>

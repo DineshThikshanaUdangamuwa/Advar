@@ -1,0 +1,17 @@
+{
+	"authors": [
+        {
+            "name": "Dinesh Thikshana"
+        }
+    ],
+    "require" : {
+        "php"                   : ">=5.3.3",
+        "twig/twig": "1.*",
+        "silex/silex": "1.2.*@dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Advar": "src"
+        }
+    }
+}

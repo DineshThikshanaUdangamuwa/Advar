@@ -1,0 +1,174 @@
+{#
+    Audit.html.twig
+#}
+
+<style>
+    .cursor :hover{
+        cursor: pointer;
+    }          
+    #table-scroll {
+        height:280px;
+        overflow:auto;         
+    }
+    #side_data{
+        max-height: 330px;
+        overflow:auto; 
+    }
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background: rgba(65,34,0,0.8); 
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    }
+    ::-webkit-scrollbar-thumb:window-inactive {
+        background: rgba(255,0,0,0.4); 
+    }
+    
+</style>
+
+<div class="well">
+    <form class="form-horizontal" role="form" action="{{search_url}}" method="post">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="entity_type" class="col-sm-2 control-label">Entity </label>
+                    <div class="col-sm-8">
+                        <select name="entity_type" class="form-control input-sm"  id="entity_type">
+                    {% if entity_types %}
+                            <option>All</option>
+                    {% for type in entity_types%}
+                            <option {% if audit_filter.entity_type and  audit_filter.entity_type == type%}
+                                selected {% endif %} >{{type}}</option>
+                    {%endfor%}
+                    {% else %}
+                            <option></option>
+                    {% endif %}                    
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="action_type" class="col-sm-2 control-label">Action </label>
+                    <div class="col-sm-8">
+                        <select name="action_type" class="form-control input-sm"  id="action_type">
+                    {% if action_types %}
+                            <option>All</option>
+                    {% for type in action_types%}
+                            <option {% if audit_filter.action_type and  audit_filter.action_type == type%}
+                                selected {% endif %}>   {{type}}</option>
+                    {%endfor%}
+                    {% else %}
+                            <option></option>
+                    {% endif %} 
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="before" class="col-sm-2 control-label">Before</label>
+                    <div class="col-sm-8">
+                        <input name="before" value="{{audit_filter.before}}" type="date" class="form-control input-sm" id="before">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="after" class="col-sm-2 control-label">After</label>
+                    <div class="col-sm-8">
+                        <input name="after" value="{{audit_filter.after}}" type="date" class="form-control input-sm" id="after">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="id" class="col-sm-2 control-label">ID</label>
+                    <div class="col-sm-8 ">
+                        <input name="entity_id" value="{{audit_filter.entity_id}}" type="text" class="form-control input-sm " id="id" placeholder="ID">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3 text-center">
+                <input type="submit" value="Search" class=" btn btn-primary img-thumbnail">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 ">
+                {% if audits | length > 0 %}
+                <table class="table table-condensed table-hover">
+                    <colgroup>
+                        <col style="width: 30%;">
+                        <col style="width: 30%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                        <tr class="success text-center">
+                            <th  > Time </th>
+                            <th  > Entity </th>
+                            <th > Action </th>
+                            <th class="text-center" >Entity ID </th>                            
+                        </tr>
+                </table>
+                {% endif %}
+                <div id="table-scroll">
+                    {% if audits | length > 0 %}
+                    <table class="table table-condensed table-hover">
+                        <colgroup>
+                        <col style="width: 30%;">
+                        <col style="width: 30%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                        
+                        {% for audit in audits %}                        
+                        <tr class="cursor" onclick="getAuditData({{audit.audit_id}})">
+                            <td>{{audit.time_stamp | date("M jS Y ")}}</td>
+                            <td>{{audit.entity_type}}</td>
+                            <td>{{audit.action_type}}</td>
+                            <td class="text-center">{{audit.entity_id }}</td>    
+                        </tr>                                         
+                        {% endfor %}                        
+                        {% else %}
+                        <center><h3><span class="label label-default"> ~~ No Audit Data ~~</span></h3></center>
+                        {% endif %}
+                    </table>        
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="side_data" class="well">
+                    <h4 class="text-center"><span class="label label-info">Audit Data</span></h4>
+                    <p>
+                    <pre id="audit_data">
+                    <center> <span id="audit_data_span" class="label label-danger">select an audit to view data</span></center>
+                    </pre>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getAuditData(auditID){        
+        $.post("{{audit_data_get_url}}",{'auditID':auditID}, function(data) {
+            $('#audit_data_span').hide();
+            $('#audit_data').text(data);
+        });
+    }
+</script>

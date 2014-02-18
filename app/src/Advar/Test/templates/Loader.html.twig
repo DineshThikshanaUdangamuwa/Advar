@@ -1,0 +1,36 @@
+{#  Loader Twig template
+    common configurations for a page
+ #}
+
+{% extends "Layout.html.twig"%}
+
+
+{% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block title%} My page {% endblock %}
+    
+{% block header %}
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">                       
+            <a class="navbar-brand" href="#"> Header Content </a>
+        </div>                    
+    </div>
+{% endblock %}
+    
+{% block header_content %} {% endblock %} 
+
+{% block footer %} 
+    <br>
+    <div class="container text-center">
+        <p class="text-muted"> Footer content here.</p>
+    </div>
+{% endblock %} 
+    
+    
+{% block scripts %} 
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="Bootstrap/js/bootstrap.min.js"></script>
+{% endblock %}
